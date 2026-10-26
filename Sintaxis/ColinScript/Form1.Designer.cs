@@ -69,13 +69,21 @@
             this.dgvPrefijo = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabResultados = new System.Windows.Forms.TabControl();
+            this.tabTripletas = new System.Windows.Forms.TabPage();
             this.dgvTripleta = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabCuadruplos = new System.Windows.Forms.TabPage();
+            this.dgvCuadruplos = new System.Windows.Forms.DataGridView();
+            this.colOperador = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colArgumento1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colArgumento2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colResultado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.richEnsamblador = new System.Windows.Forms.RichTextBox();
             this.btnEjecutarEnsamblador = new System.Windows.Forms.Button();
+            this.richEnsamblador = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvErroresLexicos)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaSimbolos)).BeginInit();
@@ -85,7 +93,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvErroresSemanticos)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPrefijo)).BeginInit();
+            this.tabResultados.SuspendLayout();
+            this.tabTripletas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTripleta)).BeginInit();
+            this.tabCuadruplos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCuadruplos)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -348,7 +360,7 @@
             // richtxtBottomUp
             // 
             this.richtxtBottomUp.BackColor = System.Drawing.Color.Cornsilk;
-            this.richtxtBottomUp.Location = new System.Drawing.Point(6, 72);
+            this.richtxtBottomUp.Location = new System.Drawing.Point(10, 49);
             this.richtxtBottomUp.Name = "richtxtBottomUp";
             this.richtxtBottomUp.Size = new System.Drawing.Size(505, 383);
             this.richtxtBottomUp.TabIndex = 22;
@@ -458,7 +470,7 @@
             this.tabPage3.Controls.Add(this.label6);
             this.tabPage3.Controls.Add(this.label5);
             this.tabPage3.Controls.Add(this.dgvPrefijo);
-            this.tabPage3.Controls.Add(this.dgvTripleta);
+            this.tabPage3.Controls.Add(this.tabResultados);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(515, 548);
@@ -485,9 +497,9 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(206, 247);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(104, 25);
+            this.label6.Size = new System.Drawing.Size(130, 25);
             this.label6.TabIndex = 26;
-            this.label6.Text = "Tripletas";
+            this.label6.Text = "Resultados";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label5
@@ -525,6 +537,26 @@
             this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
             this.dataGridViewTextBoxColumn7.Width = 240;
             // 
+            // tabResultados
+            // 
+            this.tabResultados.Controls.Add(this.tabTripletas);
+            this.tabResultados.Controls.Add(this.tabCuadruplos);
+            this.tabResultados.Location = new System.Drawing.Point(3, 280);
+            this.tabResultados.Name = "tabResultados";
+            this.tabResultados.SelectedIndex = 0;
+            this.tabResultados.Size = new System.Drawing.Size(509, 177);
+            this.tabResultados.TabIndex = 28;
+            // 
+            // tabTripletas
+            // 
+            this.tabTripletas.Controls.Add(this.dgvTripleta);
+            this.tabTripletas.Location = new System.Drawing.Point(4, 22);
+            this.tabTripletas.Name = "tabTripletas";
+            this.tabTripletas.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTripletas.Size = new System.Drawing.Size(501, 151);
+            this.tabTripletas.TabIndex = 0;
+            this.tabTripletas.Text = "Tripletas";
+            // 
             // dgvTripleta
             // 
             this.dgvTripleta.BackgroundColor = System.Drawing.Color.Cornsilk;
@@ -533,9 +565,10 @@
             this.dataGridViewTextBoxColumn3,
             this.dataGridViewTextBoxColumn4,
             this.dataGridViewTextBoxColumn5});
-            this.dgvTripleta.Location = new System.Drawing.Point(86, 284);
+            this.dgvTripleta.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvTripleta.Location = new System.Drawing.Point(3, 3);
             this.dgvTripleta.Name = "dgvTripleta";
-            this.dgvTripleta.Size = new System.Drawing.Size(345, 167);
+            this.dgvTripleta.Size = new System.Drawing.Size(495, 145);
             this.dgvTripleta.TabIndex = 4;
             // 
             // dataGridViewTextBoxColumn3
@@ -553,6 +586,62 @@
             this.dataGridViewTextBoxColumn5.HeaderText = "Operador";
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             // 
+            // tabCuadruplos
+            // 
+            this.tabCuadruplos.Controls.Add(this.dgvCuadruplos);
+            this.tabCuadruplos.Location = new System.Drawing.Point(4, 22);
+            this.tabCuadruplos.Name = "tabCuadruplos";
+            this.tabCuadruplos.Padding = new System.Windows.Forms.Padding(3);
+            this.tabCuadruplos.Size = new System.Drawing.Size(501, 151);
+            this.tabCuadruplos.TabIndex = 1;
+            this.tabCuadruplos.Text = "Cuádruplos";
+            // 
+            // dgvCuadruplos
+            // 
+            this.dgvCuadruplos.AllowUserToAddRows = false;
+            this.dgvCuadruplos.AllowUserToDeleteRows = false;
+            this.dgvCuadruplos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvCuadruplos.BackgroundColor = System.Drawing.Color.Cornsilk;
+            this.dgvCuadruplos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colOperador,
+            this.colArgumento1,
+            this.colArgumento2,
+            this.colResultado});
+            this.dgvCuadruplos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCuadruplos.Location = new System.Drawing.Point(3, 3);
+            this.dgvCuadruplos.Name = "dgvCuadruplos";
+            this.dgvCuadruplos.ReadOnly = true;
+            this.dgvCuadruplos.Size = new System.Drawing.Size(495, 145);
+            this.dgvCuadruplos.TabIndex = 0;
+            // 
+            // colOperador
+            // 
+            this.colOperador.HeaderText = "Operador";
+            this.colOperador.Name = "colOperador";
+            this.colOperador.ReadOnly = true;
+            this.colOperador.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colArgumento1
+            // 
+            this.colArgumento1.HeaderText = "Argumento 1";
+            this.colArgumento1.Name = "colArgumento1";
+            this.colArgumento1.ReadOnly = true;
+            this.colArgumento1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colArgumento2
+            // 
+            this.colArgumento2.HeaderText = "Argumento 2";
+            this.colArgumento2.Name = "colArgumento2";
+            this.colArgumento2.ReadOnly = true;
+            this.colArgumento2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colResultado
+            // 
+            this.colResultado.HeaderText = "Resultado";
+            this.colResultado.Name = "colResultado";
+            this.colResultado.ReadOnly = true;
+            this.colResultado.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.Color.LightCyan;
@@ -563,16 +652,6 @@
             this.tabPage4.Size = new System.Drawing.Size(515, 548);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Ensamblador";
-            // 
-            // richEnsamblador
-            // 
-            this.richEnsamblador.BackColor = System.Drawing.Color.Cornsilk;
-            this.richEnsamblador.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richEnsamblador.Location = new System.Drawing.Point(3, 18);
-            this.richEnsamblador.Name = "richEnsamblador";
-            this.richEnsamblador.Size = new System.Drawing.Size(497, 374);
-            this.richEnsamblador.TabIndex = 1;
-            this.richEnsamblador.Text = "";
             // 
             // btnEjecutarEnsamblador
             // 
@@ -587,6 +666,16 @@
             this.btnEjecutarEnsamblador.Text = "Generar y ejecutar";
             this.btnEjecutarEnsamblador.UseVisualStyleBackColor = false;
             this.btnEjecutarEnsamblador.Click += new System.EventHandler(this.btnEjecutarEnsamblador_Click);
+            // 
+            // richEnsamblador
+            // 
+            this.richEnsamblador.BackColor = System.Drawing.Color.Cornsilk;
+            this.richEnsamblador.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richEnsamblador.Location = new System.Drawing.Point(3, 18);
+            this.richEnsamblador.Name = "richEnsamblador";
+            this.richEnsamblador.Size = new System.Drawing.Size(497, 374);
+            this.richEnsamblador.TabIndex = 1;
+            this.richEnsamblador.Text = "";
             // 
             // Form1
             // 
@@ -624,7 +713,11 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPrefijo)).EndInit();
+            this.tabResultados.ResumeLayout(false);
+            this.tabTripletas.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTripleta)).EndInit();
+            this.tabCuadruplos.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCuadruplos)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -668,6 +761,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.DataGridView dgvTripleta;
+        private System.Windows.Forms.TabControl tabResultados;
+        private System.Windows.Forms.TabPage tabTripletas;
+        private System.Windows.Forms.TabPage tabCuadruplos;
+        private System.Windows.Forms.DataGridView dgvCuadruplos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colOperador;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colArgumento1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colArgumento2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colResultado;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;

@@ -1,0 +1,26 @@
+﻿Start {
+Int _Limite = 0
+Int _I = 0
+Int _J = 0
+Int _Suma = 0
+In _Limite
+For ( _I = 0 ; _I < _Limite ; _I + + )
+{
+_J = 0
+Do
+{
+If ( _I == _J )
+{
+_Suma = _Suma + (_I + 1) * 2
+}
+_J = _J + 1
+}
+While ( _J < 2 )
+}
+While ( _Suma < 10 )
+{
+_Suma = _Suma + 1
+}
+Out $resultado$
+Out _Suma
+} End

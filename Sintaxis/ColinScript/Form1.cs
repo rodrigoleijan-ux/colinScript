@@ -25,11 +25,15 @@ namespace ColinScript
 {
     public partial class Form1 : Form
     {
+        // Cambiar a true y recompilar para volver a mostrar la pesta?a.
+        private static readonly bool MostrarEnsamblador = false;
+
         List<string> nombre = new List<string>();
         List<int> numero = new List<int>();
         List<string> tipodato = new List<string>();
         List<string> idensindeclarar = new List<string>();
-        SqlConnection miConexion = new SqlConnection("server=ALEX;database=Automatas2; integrated security=true");
+        SqlConnection miConexion = new SqlConnection(
+            @"Server=localhost\SQLEXPRESS;Database=Automatas2;Integrated Security=True;TrustServerCertificate=True;");
         public static string[] matrizaracteres = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "/", "*", "&", "|", "!", "=", ">", "<", "(", ")", "[", "]", "{", "}", ":", ";", "'", "^", "#", "$", ".", "_" };
 
         string mostrar = "";
@@ -46,6 +50,19 @@ namespace ColinScript
         public Form1()
         {
             InitializeComponent();
+            if (!MostrarEnsamblador)
+                tabControl1.TabPages.Remove(tabPage4);
+            var pagina = new TabPage("Tres direcciones");
+            pagina.Controls.Add(txtTresDirecciones);
+            tabResultados.TabPages.Add(pagina);
+            dgvTripleta.Columns[0].HeaderText = "Operador";
+            dgvTripleta.Columns[1].HeaderText = "Argumento 1";
+            dgvTripleta.Columns[2].HeaderText = "Argumento 2";
+            dgvTripleta.RowHeadersWidth = 65;
+            dgvTripleta.ReadOnly = true;
+            dgvTripleta.AllowUserToAddRows = false;
+            dgvCuadruplos.ReadOnly = true;
+            dgvCuadruplos.AllowUserToAddRows = false;
             txtLineasCod.Text = "1";
             txtLineasToken.Text = "1";
         }
@@ -143,7 +160,8 @@ namespace ColinScript
 
         public string ConsultarBD(int posicionColumna, bool FDC)
         {
-            SqlConnection miConexion = new SqlConnection("server=ALEX;database=Automatas2; integrated security=true");
+            SqlConnection miConexion = new SqlConnection(
+                @"Server=localhost\SQLEXPRESS;Database=Automatas2;Integrated Security=True;TrustServerCertificate=True;");
             miConexion.Open();
 
             //selecciona la columna en base a la posicion de la letra, en la donde la columna 1 sea igual a la fila (iniciando en 1)
@@ -974,190 +992,36 @@ namespace ColinScript
             }
         }
 
+        private readonly System.Windows.Forms.TextBox txtTresDirecciones = new System.Windows.Forms.TextBox
+        {
+            Multiline = true, ReadOnly = true, Dock = DockStyle.Fill,
+            ScrollBars = ScrollBars.Both, WordWrap = false
+        };
+
         private void btnCodigoIntermedio_Click(object sender, EventArgs e)
         {
             dgvPrefijo.Rows.Clear();
             dgvTripleta.Rows.Clear();
-
-            int _intNumLinea = 0;
-            _intTemporal = 0;
-
-            List<string> Codigo = new List<string>();
-
-            foreach (string Linea in txt_codigo.Lines)
+            dgvCuadruplos.Rows.Clear();
+            txtTresDirecciones.Clear();
+            try
             {
-                if (Linea.StartsWith("_")) //Asignacion
+                var programa = new GeneradorIntermedio().Generar(txt_codigo.Text);
+                foreach (var prefija in programa.Prefijas)
+                    dgvPrefijo.Rows.Add(prefija.Key, prefija.Value);
+                foreach (var c in programa.Operaciones)
+                    dgvCuadruplos.Rows.Add(c.Operador, c.Argumento1, c.Argumento2, c.Resultado);
+                foreach (var t in programa.GenerarTripletas())
                 {
-                    dgvPrefijo.Rows.Add(Linea, ConvertirInfijaAPrefija(Linea));
+                    int indice = dgvTripleta.Rows.Add(t.Operador, t.Argumento1, t.Argumento2);
+                    dgvTripleta.Rows[indice].HeaderCell.Value = "[" + indice + "]";
                 }
-
-                if (Linea.StartsWith("Int")) //Declaracion
-                {
-                    dgvPrefijo.Rows.Add(Linea.Substring(4, Linea.Length - 4), ConvertirInfijaAPrefija(Linea.Substring(4, Linea.Length - 4)));
-                }
+                txtTresDirecciones.Text = programa.GenerarTresDirecciones();
             }
-
-            
-            foreach (DataGridViewRow fila in dgvPrefijo.Rows)
+            catch (FormatException ex)
             {
-                if (fila.Cells[1].Value != null)
-                {
-                    var tripletas = GenerarTripletasDesdePrefija(fila.Cells[1].Value.ToString());
-                    foreach (var tripleta in tripletas)
-                    {
-                        dgvTripleta.Rows.Add(tripleta.Objeto, tripleta.Fuente, tripleta.Operador);
-                    }
-                }
+                txtTresDirecciones.Text = "No se pudo generar el codigo intermedio: " + ex.Message;
             }
-        }
-
-        static int Precedencia(char op)
-        {
-            if (op == '+' || op == '-')
-                return 1;
-            else if (op == '*' || op == '/')
-                return 2;
-            else
-                return 0;
-        }
-
-        static string ConvertirInfijaAPrefija(string infija)
-        {
-            Stack<string> operandos = new Stack<string>();
-            Stack<char> operadores = new Stack<char>();
-
-            for (int i = infija.Length - 1; i >= 0; i--)
-            {
-                char c = infija[i];
-
-                if (c == ' ')
-                    continue;
-
-                if (char.IsLetterOrDigit(c))
-                {
-                    string operando = c.ToString();
-
-                    while (i - 1 >= 0 && (char.IsLetterOrDigit(infija[i - 1]) || infija[i - 1] == '_'))
-                    {
-                        i--;
-                        operando = infija[i] + operando;
-                    }
-
-                    operandos.Push(operando);
-                }
-                else // operador
-                {
-                    while (operadores.Count > 0 &&
-                           Precedencia(c) < Precedencia(operadores.Peek()))
-                    {
-                        ProcesarOperador(operadores, operandos);
-                    }
-                    operadores.Push(c);
-                }
-            }
-
-            while (operadores.Count > 0)
-            {
-                ProcesarOperador(operadores, operandos);
-            }
-
-            return operandos.Pop();
-        }
-
-        static void ProcesarOperador(Stack<char> operadores, Stack<string> operandos)
-        {
-            char op = operadores.Pop();
-            string op1 = operandos.Pop();
-            string op2 = operandos.Pop();
-            string expresion = op + " " + op1 + " " + op2;
-            operandos.Push(expresion);
-        }
-
-        public class Tripleta
-        {
-            public string Objeto { get; set; }
-            public string Fuente { get; set; }
-            public string Operador { get; set; }
-        }
-
-        int _intTemporal = 0;
-        private List<Tripleta> GenerarTripletasDesdePrefija(string prefija)
-        {
-            string[] tokens = prefija.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            Stack<string> pila = new Stack<string>();
-            List<Tripleta> tripletas = new List<Tripleta>();
-
-            
-
-            // Caso especial: asignación simple sin operación
-            if (tokens.Length == 3 && tokens[0] == "=")
-            {
-                // tokens[1] = variable destino
-                // tokens[2] = valor o variable fuente
-                tripletas.Add(new Tripleta
-                {
-                    Objeto = tokens[1],
-                    Fuente = tokens[2],
-                    Operador = "="
-                });
-                return tripletas;
-            }
-
-            _intTemporal++;
-            string temporal = "T" + _intTemporal;
-
-            string destinoFinal = null;
-
-            int inicio = 0;
-
-            if (tokens.Length >= 3 && tokens[0] == "=")
-            {
-                destinoFinal = tokens[1];
-                inicio = 2;
-            }
-
-            for (int i = tokens.Length - 1; i >= inicio; i--)
-            {
-                string token = tokens[i];
-
-                if (EsOperador(token))
-                {
-                    string op1 = pila.Pop();
-                    string op2 = pila.Pop();
-
-                    // Ambos operandos no son T1
-                    if (op1 != temporal && op2 != temporal)
-                    {
-                        tripletas.Add(new Tripleta { Objeto = temporal, Fuente = op1, Operador = "=" });
-                        tripletas.Add(new Tripleta { Objeto = temporal, Fuente = op2, Operador = token });
-                    }
-                    else if (op1 == temporal && op2 != temporal)
-                    {
-                        tripletas.Add(new Tripleta { Objeto = temporal, Fuente = op2, Operador = token });
-                    }
-                    else if (op2 == temporal && op1 != temporal)
-                    {
-                        tripletas.Add(new Tripleta { Objeto = temporal, Fuente = op1, Operador = token });
-                    }
-                    else if (op1 == temporal && op2 == temporal)
-                    {
-                        // Esto en teoría no debería pasar con una sola temporal
-                    }
-
-                    pila.Push(temporal);
-                }
-                else
-                {
-                    pila.Push(token);
-                }
-            }
-
-            if (destinoFinal != null)
-            {
-                tripletas.Add(new Tripleta { Objeto = destinoFinal, Fuente = temporal, Operador = "=" });
-            }
-
-            return tripletas;
         }
 
         private bool EsOperador(string token)
